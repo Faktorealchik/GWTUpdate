@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal">
+    <data-source name="asresh4w_gwttest@asresh4w.beget.tech" uuid="312d3d46-78fb-4c78-b0d6-e30522204dea">
+      <database-info product="MySQL" version="5.7.18-15-beget-5.7.18-15-2-3-log" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.40 ( Revision: 402933ef52cad9aa82624e80acbea46e3a701ce6 )">
+        <extra-name-characters>#@</extra-name-characters>
+        <identifier-quote-string>`</identifier-quote-string>
+      </database-info>
+      <case-sensitivity plain-identifiers="exact" quoted-identifiers="exact" />
+      <secret-storage>master_key</secret-storage>
+      <user-name>asresh4w_gwttest</user-name>
+      <resolve-scope>asresh4w_gwttest:</resolve-scope>
+    </data-source>
+    <data-source name="hibernate.cfg.xml/Hibernate" uuid="bd4f19a9-889a-4f23-8f87-1fc2ba5b2d35">
+      <database-info product="MySQL" version="5.7.18-15-beget-5.7.18-15-2-3-log" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.40 ( Revision: 402933ef52cad9aa82624e80acbea46e3a701ce6 )">
+        <extra-name-characters>#@</extra-name-characters>
+        <identifier-quote-string>`</identifier-quote-string>
+      </database-info>
+      <case-sensitivity plain-identifiers="exact" quoted-identifiers="exact" />
+      <secret-storage>master_key</secret-storage>
+      <user-name>asresh4w_gwttest</user-name>
+      <resolve-scope>asresh4w_gwttest:</resolve-scope>
+    </data-source>
+  </component>
+</project>

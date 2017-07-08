@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="hibernate.cfg.xml/Hibernate">
+  <database-model serializer="dbm" rdbms="MYSQL" format-version="4.0">
+    <root id="1"/>
+    <schema id="2" parent="1" name="asresh4w_gwttest">
+      <Current>1</Current>
+      <Visible>1</Visible>
+    </schema>
+    <schema id="3" parent="1" name="information_schema"/>
+    <table id="4" parent="2" name="club"/>
+    <table id="5" parent="2" name="hibernate_sequence"/>
+    <table id="6" parent="2" name="player"/>
+    <column id="7" parent="4" name="club_id">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="8" parent="4" name="name">
+      <Position>2</Position>
+      <DataType>varchar(45)|0</DataType>
+    </column>
+    <key id="9" parent="4" name="PRIMARY">
+      <ColNames>club_id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="10" parent="5" name="next_val">
+      <Position>1</Position>
+      <DataType>bigint(20)|0</DataType>
+    </column>
+    <column id="11" parent="6" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="12" parent="6" name="lastName">
+      <Position>2</Position>
+      <DataType>varchar(45)|0</DataType>
+    </column>
+    <column id="13" parent="6" name="firstName">
+      <Position>3</Position>
+      <DataType>varchar(45)|0</DataType>
+    </column>
+    <column id="14" parent="6" name="secondName">
+      <Position>4</Position>
+      <DataType>varchar(45)|0</DataType>
+    </column>
+    <column id="15" parent="6" name="dateBirth">
+      <Position>5</Position>
+      <DataType>date|0</DataType>
+    </column>
+    <column id="16" parent="6" name="clubId">
+      <Position>6</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <index id="17" parent="6" name="club_id_idx">
+      <ColNames>clubId</ColNames>
+    </index>
+    <key id="18" parent="6" name="PRIMARY">
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="19" parent="6" name="club_id">
+      <ColNames>clubId</ColNames>
+      <RefSchemaName>asresh4w_gwttest</RefSchemaName>
+      <RefTableName>club</RefTableName>
+      <RefColNames>club_id</RefColNames>
+      <OnUpdate>update</OnUpdate>
+      <OnDelete>delete</OnDelete>
+    </foreign-key>
+  </database-model>
+</dataSource>

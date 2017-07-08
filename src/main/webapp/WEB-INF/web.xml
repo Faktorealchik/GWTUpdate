@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
+    <servlet>
+        <servlet-name>app</servlet-name>
+        <servlet-class>com.app.server.AppImpl</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>app</servlet-name>
+        <url-pattern>/MySampleApplication/MySampleApplicationService</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ClubInt</servlet-name>
+        <servlet-class>com.app.server.ClubImpl</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ClubInt</servlet-name>
+        <url-pattern>/Club/Club</url-pattern>
+    </servlet-mapping>
+
+    <welcome-file-list>
+        <welcome-file>Players.html</welcome-file>
+    </welcome-file-list>
+</web-app>

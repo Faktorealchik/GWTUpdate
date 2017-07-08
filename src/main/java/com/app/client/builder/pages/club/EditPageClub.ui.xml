@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g="urn:import:com.google.gwt.user.client.ui">
+
+
+    <ui:style src="../../css/App.css"/>
+
+    <g:VerticalPanel ui:field="verticalPanel" verticalAlignment="ALIGN_TOP" width="100%"
+                     horizontalAlignment="ALIGN_CENTER" styleName="{style.verticalPanel}">
+        <g:FlexTable width="100%" ui:field="gridTable" borderWidth="0" styleName="{style.flextable}"/>
+
+        <g:ScrollPanel height="210px"/>
+
+        <g:HTMLPanel ui:field="htmlpanel" width="50%" >
+            <div>
+                <g:TextBox ui:field="name" styleName="{style.input}"/>
+            </div>
+        </g:HTMLPanel>
+        <g:Button ui:field="changeButton" text="change" styleName="{style.button}" width="50%" visible="true"/>
+        <g:Button ui:field="exitButton" text="exit" styleName="{style.button}" width="50%" visible="true"/>
+    </g:VerticalPanel>
+</ui:UiBinder>

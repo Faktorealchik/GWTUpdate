@@ -1,0 +1,73 @@
+body {
+    margin:0;
+    padding:0;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.42em;
+    color: #A7A1AE;
+    background-color: #1F2739;
+}
+
+h1 {
+    font-size: 200%;
+    font-weight: 300;
+    line-height: 1em;
+    text-align: center;
+    color: #4DC3FA;
+}
+
+.input, .button, .updateButton {
+    width: 100%;
+    font-size: 150%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: none;
+}
+.updateButton {
+    font-size: 70%;
+}
+
+.input {
+    border-bottom: 2px solid #ffd347;
+}
+
+.input:focus {
+    width: 100%;
+    box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+    border: 1px solid rgba(81, 203, 238, 1);
+}
+
+.flextable {
+    font-size: 175%;
+    text-align: left;
+}
+
+
+.flextable td {
+    font-weight: normal;
+    font-size: 1em;
+}
+
+
+.flextable tr {
+    background-color: #323C50;
+}
+
+
+.flextable tr:hover {
+    background-color: #464A52;
+}
+
+
+.flextable td:hover {
+    background-color: #FFF842;
+    color: #403E10;
+}
+
+.verticalPanel {
+    position: relative;
+    bottom: 280px;
+}
+
+
