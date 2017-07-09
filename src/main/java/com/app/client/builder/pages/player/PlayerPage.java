@@ -1,8 +1,9 @@
 package com.app.client.builder.pages.player;
 
-import com.app.client.AppIntAsync;
+import com.app.client.interfaces.AppIntAsync;
 import com.app.client.builder.helper.DoubleClickTable;
 import com.app.client.builder.helper.Helper;
+import com.app.shared.Club;
 import com.app.shared.Player;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -33,7 +34,7 @@ public class PlayerPage extends Composite {
     @UiField
     TextBox dateBirth;
     @UiField
-    TextBox clubId;
+    ListBox clubId;
 
     @UiField
     Button addButton;
@@ -51,7 +52,7 @@ public class PlayerPage extends Composite {
      * В конструкторе устанавливаем таблицу,
      * добавляем слушателей ко всем кнопкам.
      *
-     * @param dbService
+     * @param dbService сервис БД
      */
     public PlayerPage(AppIntAsync dbService) {
         this.dbService = dbService;
@@ -62,11 +63,24 @@ public class PlayerPage extends Composite {
         firstName.getElement().setAttribute("placeholder", "First name");
         secondName.getElement().setAttribute("placeholder", "Second name");
         dateBirth.getElement().setAttribute("placeholder", "Date of birth");
-        clubId.getElement().setAttribute("placeholder", "Club");
+
+        dbService.getClubs(new AsyncCallback<List<Club>>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert("Problem with load clubs\n"+caught);
+            }
+
+            @Override
+            public void onSuccess(List<Club> result) {
+                for (Club aResult : result) {
+                    clubId.addItem(aResult.getName(), String.valueOf(aResult.getId()));
+                }
+            }
+        });
 
 
         createDoubleClickHandler();
-        helper.createTableHandler(table);
+        createTableHandler();
 
         clubId.addKeyDownHandler(event ->
         {
@@ -78,6 +92,35 @@ public class PlayerPage extends Composite {
         addButton.addClickHandler(event -> addRow());
 
         setDeleteHandler();
+    }
+
+    /**
+     * слушатель на клик по таблице (чекбокс устанавливается)
+     *
+     */
+    private void createTableHandler() {
+        table.addClickHandler(event -> {
+            HTMLTable.Cell cell = table.getCellForEvent(event);
+            int rowIndex = cell.getRowIndex();
+            int cellIndex = cell.getCellIndex();
+
+            CheckBox checkBox = (CheckBox) table.getWidget(rowIndex, 0);
+
+            //если клинкнули на сам чекбокс(так как он меняется сам, то ничего не делаем
+            //но, если нажимать на ячейку 0, рядом с ним, то меняться не будет тоже.
+            if (cellIndex == 0) {
+                return;
+            }
+
+            if (rowIndex > 0) {
+                if (checkBox.getValue()) {
+                    checkBox.setValue(false);
+                } else {
+                    checkBox.setValue(true);
+                }
+                table.setWidget(rowIndex, 0, checkBox);
+            }
+        });
     }
 
     /**
@@ -125,7 +168,7 @@ public class PlayerPage extends Composite {
      * получаем книгу из строки
      * отсылаем запрос на обновление этой книги
      */
-    public HandlerRegistration createDoubleClickHandler() {
+    private HandlerRegistration createDoubleClickHandler() {
         return table.addDoubleClickHandler(event -> {
             HTMLTable.Cell cell = table.getCellForEvent(event);
             int rowIndex = cell.getRowIndex();
@@ -155,17 +198,19 @@ public class PlayerPage extends Composite {
      * добавляем в массив книг
      * добавляем строчку в таблице
      */
+    @SuppressWarnings("deprecation")
     private void addRow() {
         final String lastName = this.lastName.getText().trim();
         final String firstName = this.firstName.getText().trim();
         final String secondName = this.secondName.getText().trim();
         final String dateBirth = helper.formatDate(this.dateBirth.getText());
-        final int clubId = Integer.parseInt(this.clubId.getText());
+        final int clubId = Integer.parseInt(this.clubId.getSelectedValue());
 
-        dbService.addPlayer(lastName, firstName, secondName, new Date(dateBirth), clubId, new AsyncCallback<Player>() {
+        dbService.addPlayer(new Player(lastName, firstName, secondName, new Date(dateBirth), clubId), new AsyncCallback<Player>() {
             @Override
             public void onFailure(Throwable caught) {
-                Window.alert("this club didn`t exist");
+                Window.alert("Failed, reconnect.");
+                Window.Location.reload();
             }
 
             @Override
@@ -187,9 +232,8 @@ public class PlayerPage extends Composite {
             }
         });
 
-        helper.clear(this.lastName, this.firstName, this.secondName, this.clubId, this.dateBirth);
+        helper.clear(this.lastName, this.firstName, this.secondName, this.dateBirth);
     }
-
 
 
     /**
@@ -208,7 +252,7 @@ public class PlayerPage extends Composite {
         dbService.getPlayers(new AsyncCallback<List<Player>>() {
             @Override
             public void onFailure(Throwable caught) {
-                Window.alert("error load players");
+                Window.alert("error load players\n"+caught);
             }
 
             @Override
@@ -230,7 +274,6 @@ public class PlayerPage extends Composite {
                 }
             }
         });
-
 
         table.setCellPadding(10);
     }

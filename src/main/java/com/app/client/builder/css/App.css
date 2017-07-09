@@ -1,6 +1,6 @@
 body {
-    margin:0;
-    padding:0;
+    margin: 0;
+    padding: 0;
     font-family: 'Open Sans', sans-serif;
     font-weight: 300;
     line-height: 1.42em;
@@ -24,6 +24,7 @@ h1 {
     box-sizing: border-box;
     border: none;
 }
+
 .updateButton {
     font-size: 70%;
 }
@@ -43,24 +44,44 @@ h1 {
     text-align: left;
 }
 
-
 .flextable td {
     font-weight: normal;
     font-size: 1em;
 }
 
-
 .flextable tr {
     background-color: #323C50;
 }
-
 
 .flextable tr:hover {
     background-color: #464A52;
 }
 
-
 .flextable td:hover {
+    background-color: #FFF842;
+    color: #403E10;
+}
+
+.table {
+    top: 300px;
+    font-size: 175%;
+    text-align: left;
+}
+
+.table td {
+    font-weight: normal;
+    font-size: 1em;
+}
+
+.table tr {
+    background-color: #323C50;
+}
+
+.table tr:hover {
+    background-color: #464A52;
+}
+
+.table td:hover {
     background-color: #FFF842;
     color: #403E10;
 }
@@ -70,4 +91,20 @@ h1 {
     bottom: 280px;
 }
 
+.styled-select {
+    font-size:150%;
+    background-color: white;
+    height: 34px;
+    overflow: hidden;
+    width: 100%;
+    box-sizing: border-box;
+    border: none;
+}
 
+.styled-select.slate select {
+    color: white;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    height: 34px;
+    width: 50%;
+}

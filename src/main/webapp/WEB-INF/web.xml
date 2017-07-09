@@ -5,7 +5,7 @@
          version="3.1">
     <servlet>
         <servlet-name>app</servlet-name>
-        <servlet-class>com.app.server.AppImpl</servlet-class>
+        <servlet-class>com.app.server.impl.AppImpl</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>app</servlet-name>
@@ -14,14 +14,18 @@
 
     <servlet>
         <servlet-name>ClubInt</servlet-name>
-        <servlet-class>com.app.server.ClubImpl</servlet-class>
+        <servlet-class>com.app.server.impl.ClubImpl</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ClubInt</servlet-name>
         <url-pattern>/Club/Club</url-pattern>
     </servlet-mapping>
 
+    <listener>
+        <listener-class>com.app.server.HibernateListener</listener-class>
+    </listener>
+
     <welcome-file-list>
-        <welcome-file>Players.html</welcome-file>
+        <welcome-file>test.html</welcome-file>
     </welcome-file-list>
 </web-app>

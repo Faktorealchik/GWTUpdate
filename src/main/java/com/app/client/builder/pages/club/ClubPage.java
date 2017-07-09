@@ -1,154 +1,186 @@
 package com.app.client.builder.pages.club;
 
-import com.app.client.ClubIntAsync;
-import com.app.client.builder.helper.DoubleClickTable;
+import com.app.client.interfaces.ClubIntAsync;
 import com.app.client.builder.helper.Helper;
 import com.app.shared.Club;
+import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.core.shared.GWT;
-import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.event.dom.client.DoubleClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.SimplePager;
+import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.ui.*;
+import com.google.gwt.view.client.AsyncDataProvider;
+import com.google.gwt.view.client.HasData;
+import com.google.gwt.view.client.SelectionModel;
+import com.google.gwt.view.client.SingleSelectionModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClubPage extends Composite {
-
-    @UiField(provided = true)
-    DoubleClickTable table; //FlexTable
+public class ClubPage extends Composite implements RemoteService {
 
     @UiField
     TextBox name;
+    @UiField
+    HTMLPanel panel;
 
     @UiField
     Button addButton;
     @UiField
-    Button deleteActive;
+    Button delete;
     @UiField
     VerticalPanel vertPanel;
 
     private ClubIntAsync dbService;
     List<Club> clubs = new ArrayList<>();
     private Helper helper;
+    CellTable<Club> table;
+    SimplePager simplePager;
+    private Club club;
 
     public ClubPage(ClubIntAsync dbService) {
         this.dbService = dbService;
+
+        table = new CellTable<>();
+
+        //теперь можем выбирать элементы.
+        SingleSelectionModel<Club> selectionModel = new SingleSelectionModel<Club>();
+        table.setSelectionModel(selectionModel);
+
+        setupTable(selectionModel);
         helper = new Helper();
-        setupTable();
+
         initWidget(uiBinder.createAndBindUi(this));
+        simplePager = new SimplePager();
+        simplePager.setDisplay(table);
 
-        createDoubleClickHandler();
+        panel.add(table);
+        panel.add(simplePager);
 
-        //TODO: убрать магию, в первом случае не работает, зато как сейчас - все хорошо
-        createTableHandler(table);
+        table.addDomHandler(
+            event -> {
+                Club selected = selectionModel.getSelectedObject();
+                if (selected != null) {
+                    setCurrentClub(selected);
 
-//        addButton.setVisible(false);
-//        addButton.addClickHandler(event -> {
-//            RootPanel.get().clear();
-//            History.newItem("Players");
-//            RootPanel.get().add(new PlayerPage(dbService));
-//        });
-    }
-
-    private Club club;
-
-    private void setCurrentClub(Club club) {
-        this.club = club;
-    }
-
-    public Club getCurrentClub() {
-        return this.club;
-    }
-
-    /**
-     * Устанавливаем слушателя на двойной клик
-     * получаем строку, на которую кликнули
-     * получаем книгу из строки
-     * отсылаем запрос на обновление этой книги
-     */
-    public HandlerRegistration createDoubleClickHandler() {
-        return table.addDoubleClickHandler(event -> {
-            HTMLTable.Cell cell = table.getCellForEvent(event);
-            int rowIndex = cell.getRowIndex();
-
-            String name = table.getText(rowIndex, 2);
-            Club club = new Club();
-            club.setName(name);
-            int i = clubs.indexOf(club);
-            setCurrentClub(clubs.get(i));
-
-            History.newItem("EditPage");
-            RootPanel.get().add(new EditPageClub(this, dbService));
-
-        });
-    }
-
-    /**
-     * слушатель на клик по таблице (чекбокс устанавливается)
-     *
-     * @param table
-     */
-    public void createTableHandler(DoubleClickTable table) {
-        table.addClickHandler(event -> {
-            HTMLTable.Cell cell = table.getCellForEvent(event);
-            int index = cell.getRowIndex();
-            int cellIndex = cell.getCellIndex();
-
-            CheckBox checkBox = (CheckBox) table.getWidget(index, 0);
-
-            //если клинкнули на сам чекбокс(так как он меняется сам, то ничего не делаем
-            //но, если нажимать на ячейку 0, рядом с ним, то меняться не будет тоже.
-            if (cellIndex == 0) {
-                return;
-            }
-
-            if (index > 0) {
-                if (checkBox.getValue()) {
-                    checkBox.setValue(false);
-                } else {
-                    checkBox.setValue(true);
+                    History.newItem("EditPage");
+                    RootPanel.get().add(new EditPageClub(this, dbService));
                 }
-                table.setWidget(index, 0, checkBox);
-            }
+            },
+            DoubleClickEvent.getType());
+
+        addButton.addClickHandler(event -> {
+            addRow();
+        });
+
+
+        delete.addClickHandler(event -> {
+            Club selectedObject = selectionModel.getSelectedObject();
+            dbService.deleteClub(selectedObject.getId(), new AsyncCallback<Void>() {
+                @Override
+                public void onFailure(Throwable caught) {
+                    Window.alert("problems\n" + caught);
+                }
+
+                @Override
+                public void onSuccess(Void result) {
+                    clubs.remove(selectedObject);
+                    table.setRowData(clubs);
+                    table.setPageSize(5);
+                    Window.alert("Club was deleted");
+                }
+            });
         });
     }
 
+    private void addRow() {
+        final String name = this.name.getText().trim();
 
-    /**
-     * Создаем таблицу
-     */
-    private void setupTable() {
-        table = new DoubleClickTable();
-        table.setText(0, 0, "");
-        table.setText(0, 1, "Clubs id");
-        table.setText(0, 2, "Clubs name");
-        table.setText(0, 3, "Clubs players");
+        dbService.addClub(name, new AsyncCallback<Club>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert("Trouble with adding club");
+            }
+
+            @Override
+            public void onSuccess(Club result) {
+                Window.alert("Success adding new club ! ");
+                Window.Location.reload();
+            }
+        });
+
+        helper.clear(this.name);
+    }
+
+    private void setupTable(final SelectionModel<Club> selectionModel) {
+        table.setPageSize(5);
+        table.setWidth("50%");
+
+        Column<Club, Boolean> checkColumn = new Column<Club, Boolean>(
+            new CheckboxCell(true, false)) {
+            @Override
+            public Boolean getValue(Club object) {
+                return selectionModel.isSelected(object);
+            }
+        };
+        table.addColumn(checkColumn);
+
+        TextColumn<Club> clubId = new TextColumn<Club>() {
+            @Override
+            public String getValue(Club club) {
+                return String.valueOf(club.getId());
+            }
+        };
+        table.addColumn(clubId, "ID of club");
+
+        TextColumn<Club> nameColumn = new TextColumn<Club>() {
+            @Override
+            public String getValue(Club club) {
+                return club.getName();
+            }
+        };
+        table.addColumn(nameColumn, "Name");
 
         dbService.getClubs(new AsyncCallback<List<Club>>() {
             @Override
             public void onFailure(Throwable caught) {
-                Window.alert("can`t get clubs\n" + caught);
+                Window.alert("Error load clubs\n"+caught);
             }
 
             @Override
             public void onSuccess(List<Club> result) {
                 clubs = result;
-                for (int i = 0; i < result.size(); i++) {
-                    Club club = result.get(i);
-                    table.setWidget(i + 1, 0, new CheckBox());
-                    table.setText(i + 1, 1, String.valueOf(club.getId()));
-                    table.setText(i + 1, 2, club.getName());
-                    table.setText(i + 1, 3, "players");
-                }
+                AsyncDataProvider<Club> provider = new AsyncDataProvider<Club>() {
+                    @Override
+                    protected void onRangeChanged(HasData<Club> display) {
+                        int start = display.getVisibleRange().getStart();
+                        int end = start + display.getVisibleRange().getLength();
+                        end = end >= clubs.size() ? clubs.size() : end;
+                        List<Club> sub = clubs.subList(start, end);
+                        updateRowData(start, sub);
+                    }
+                };
+
+                provider.addDataDisplay(table);
+                provider.updateRowCount(clubs.size(), true);
             }
         });
+    }
 
+    private void setCurrentClub(Club club) {
+        this.club = club;
+    }
 
-        table.setCellPadding(10);
+    Club getCurrentClub() {
+        return this.club;
     }
 
     interface ClubUIPage extends UiBinder<VerticalPanel, ClubPage> {

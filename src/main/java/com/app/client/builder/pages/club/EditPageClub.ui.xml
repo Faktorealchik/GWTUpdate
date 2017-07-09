@@ -7,11 +7,14 @@
 
     <g:VerticalPanel ui:field="verticalPanel" verticalAlignment="ALIGN_TOP" width="100%"
                      horizontalAlignment="ALIGN_CENTER" styleName="{style.verticalPanel}">
-        <g:FlexTable width="100%" ui:field="gridTable" borderWidth="0" styleName="{style.flextable}"/>
+
+        <g:ScrollPanel height="300px"/>
+
+        <g:FlexTable width="100%" ui:field="gridTable" borderWidth="0" styleName="{style.table}"/>
 
         <g:ScrollPanel height="210px"/>
 
-        <g:HTMLPanel ui:field="htmlpanel" width="50%" >
+        <g:HTMLPanel ui:field="htmlpanel" width="50%">
             <div>
                 <g:TextBox ui:field="name" styleName="{style.input}"/>
             </div>

@@ -8,27 +8,26 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 public class HibernateUtil {
     private static SessionFactory sessionFactory = buildSessionFactory();
 
-    static SessionFactory buildSessionFactory() {
-        // A SessionFactory is set up once for an application!
+    public static SessionFactory buildSessionFactory() {
+        // Устанавливаем Фабрику сессий
+        /*TODO: по идее, обрываться связь не должна, но видимо GWT - не тот случай,
+        поэтому, когда что-то идет не так, мы заного формируем фабрику. */
         final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
-                .configure() // configures settings from hibernate.cfg.xml\
-                .build();
+            .configure().build();
         try {
             sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
         } catch (Exception e) {
-            // The registry would be destroyed by the SessionFactory, but we had trouble building the SessionFactory
-            // so destroy it manually.
             StandardServiceRegistryBuilder.destroy(registry);
         }
         return sessionFactory;
     }
 
-    static SessionFactory getSessionFactory() {
+    public static SessionFactory getSessionFactory() {
         return sessionFactory;
     }
 
-    static void shutdown() {
-        // Close caches and connection pools
+    public static void shutdown() {
         getSessionFactory().close();
     }
+
 }

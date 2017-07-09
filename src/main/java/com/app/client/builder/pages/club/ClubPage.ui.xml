@@ -7,15 +7,15 @@
 
     <g:VerticalPanel width="100%" height="10%" horizontalAlignment="ALIGN_CENTER">
 
-        <g:ScrollPanel width="100%" height="270px">
-            <g:FlexTable width="100%" ui:field="table" borderWidth="0" styleName="{style.flextable}"/>
-        </g:ScrollPanel>
+        <g:HTMLPanel ui:field="panel" width="100%"/>
 
         <g:VerticalPanel ui:field="vertPanel" spacing="10" verticalAlignment="ALIGN_TOP" width="50%">
+            <!--<c:SimplePager ui:field="test"/>-->
             <g:TextBox ui:field="name" styleName="{style.input}"/>
             <g:Button ui:field="addButton" text="add" styleName="{style.button}" width="100%"/>
-            <g:Button ui:field="deleteActive" text="deleteActive" styleName="{style.button}" width="100%"/>
-            <g:Button ui:field="changeButton" text="change" styleName="{style.button}" width="100%" visible="false"/>
+            <g:Button ui:field="delete" text="delete" styleName="{style.button}" width="100%"/>
+            <g:Button ui:field="changeButton" text="change name of club" styleName="{style.button}" width="100%"
+                      visible="false"/>
         </g:VerticalPanel>
     </g:VerticalPanel>
 </ui:UiBinder>
