@@ -2,80 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a50d9231-521a-4c3d-854f-05404ef7721d" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/com/app/client/builder/another/EntityPage.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/com/app/client/builder/another/EntityPage.ui.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/com/app/server/AppImpl.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/com/app/server/ClubImpl.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/com/app/server/DBService.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/com/app/server/DbException.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/test/com/app/client/builder/helper/HelperTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/test/com/app/client/dbService/DBServiceTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/app/client/App.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/app/client/AppInt.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/app/client/AppIntAsync.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/app/client/Club.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/app/client/ClubInt.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/app/client/ClubIntAsync.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/app/client/builder/helper/DoubleClickTable$MyCell.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/app/client/builder/helper/DoubleClickTable.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/app/client/builder/helper/Helper.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/app/client/builder/pages/club/ClubPage$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/app/client/builder/pages/club/ClubPage$ClubUIPage.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/app/client/builder/pages/club/ClubPage.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/app/client/builder/pages/club/EditPageClub$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/app/client/builder/pages/club/EditPageClub$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/app/client/builder/pages/club/EditPageClub$EditUIPageClub.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/app/client/builder/pages/club/EditPageClub.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/app/client/builder/pages/player/EditPage$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/app/client/builder/pages/player/EditPage$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/app/client/builder/pages/player/EditPage$EditUIPage.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/app/client/builder/pages/player/EditPage.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/app/client/builder/pages/player/PlayerPage$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/app/client/builder/pages/player/PlayerPage$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/app/client/builder/pages/player/PlayerPage$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/app/client/builder/pages/player/PlayerPage$PlayerUIPage.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/app/client/builder/pages/player/PlayerPage.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/app/server/AppImpl.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/app/server/ClubImpl.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/app/server/DbException.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/app/server/HibernateUtil.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/app/server/dao/ClubDao.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/app/server/dao/PlayerDao.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/app/shared/Club.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/app/shared/Player.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/hibernate.cfg.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/test-classes/com/app/client/dbService/DBServiceTest.class" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/com/app/client/AppInt.java" afterPath="$PROJECT_DIR$/src/main/java/com/app/client/interfaces/AppInt.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/com/app/client/AppIntAsync.java" afterPath="$PROJECT_DIR$/src/main/java/com/app/client/interfaces/AppIntAsync.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/com/app/client/ClubInt.java" afterPath="$PROJECT_DIR$/src/main/java/com/app/client/interfaces/ClubInt.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/com/app/client/ClubIntAsync.java" afterPath="$PROJECT_DIR$/src/main/java/com/app/client/interfaces/ClubIntAsync.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/artifacts/app_war_exploded.xml" afterPath="$PROJECT_DIR$/.idea/artifacts/app_war_exploded.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources.xml" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources/bd4f19a9-889a-4f23-8f87-1fc2ba5b2d35.xml" afterPath="$PROJECT_DIR$/.idea/dataSources/bd4f19a9-889a-4f23-8f87-1fc2ba5b2d35.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app.iml" afterPath="$PROJECT_DIR$/app.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/app/App.gwt.xml" afterPath="$PROJECT_DIR$/src/main/java/com/app/App.gwt.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/app/Club.gwt.xml" afterPath="$PROJECT_DIR$/src/main/java/com/app/Club.gwt.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/app/client/App.java" afterPath="$PROJECT_DIR$/src/main/java/com/app/client/App.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/app/client/Club.java" afterPath="$PROJECT_DIR$/src/main/java/com/app/client/Club.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/app/client/builder/css/App.css" afterPath="$PROJECT_DIR$/src/main/java/com/app/client/builder/css/App.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/app/client/builder/helper/Helper.java" afterPath="$PROJECT_DIR$/src/main/java/com/app/client/builder/helper/Helper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/app/client/builder/pages/club/ClubPage.java" afterPath="$PROJECT_DIR$/src/main/java/com/app/client/builder/pages/club/ClubPage.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/app/client/builder/pages/club/ClubPage.ui.xml" afterPath="$PROJECT_DIR$/src/main/java/com/app/client/builder/pages/club/ClubPage.ui.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/app/client/builder/pages/club/EditPageClub.java" afterPath="$PROJECT_DIR$/src/main/java/com/app/client/builder/pages/club/EditPageClub.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/app/client/builder/pages/club/EditPageClub.ui.xml" afterPath="$PROJECT_DIR$/src/main/java/com/app/client/builder/pages/club/EditPageClub.ui.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/app/client/builder/pages/player/EditPage.java" afterPath="$PROJECT_DIR$/src/main/java/com/app/client/builder/pages/player/EditPage.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/app/client/builder/pages/player/EditPage.ui.xml" afterPath="$PROJECT_DIR$/src/main/java/com/app/client/builder/pages/player/EditPage.ui.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/app/client/builder/pages/player/PlayerPage.java" afterPath="$PROJECT_DIR$/src/main/java/com/app/client/builder/pages/player/PlayerPage.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/app/client/builder/pages/player/PlayerPage.ui.xml" afterPath="$PROJECT_DIR$/src/main/java/com/app/client/builder/pages/player/PlayerPage.ui.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/app/server/HibernateUtil.java" afterPath="$PROJECT_DIR$/src/main/java/com/app/server/HibernateUtil.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/app/server/dao/ClubDao.java" afterPath="$PROJECT_DIR$/src/main/java/com/app/server/dao/ClubDao.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/app/shared/Club.java" afterPath="$PROJECT_DIR$/src/main/java/com/app/shared/Club.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml" afterPath="$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/test.html" afterPath="$PROJECT_DIR$/src/main/webapp/test.html" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -1262,7 +1189,7 @@
       <workItem from="1499577090200" duration="17207000" />
       <workItem from="1499594462551" duration="1685000" />
       <workItem from="1499596451641" duration="3204000" />
-      <workItem from="1499629457351" duration="902000" />
+      <workItem from="1499629457351" duration="969000" />
     </task>
     <servers />
   </component>
@@ -1299,7 +1226,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="141991000" />
+    <option name="totallyTimeSpent" value="142058000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
