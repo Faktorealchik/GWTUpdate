@@ -258,7 +258,6 @@ public class PlayerPage extends Composite {
             @Override
             public void onSuccess(List<Player> result) {
                 players = result;
-                //TODO: можно сделать вместо ИД у clubID имя клуба
                 for (int i = 0; i < result.size(); i++) {
                     Player p = result.get(i);
 
