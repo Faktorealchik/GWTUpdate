@@ -26,7 +26,7 @@
                     <g:TextBox ui:field="dateBirth" styleName="{style.input}"/>
                 </div>
                 <div>
-                    <g:TextBox ui:field="clubId" styleName="{style.input}"/>
+                    <g:ListBox ui:field="clubId" styleName="{style.styled-select}"/>
                 </div>
             </g:HTMLPanel>
             <g:Button ui:field="addButton" text="add" styleName="{style.button}" width="100%"/>

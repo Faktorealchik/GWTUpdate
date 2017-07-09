@@ -15,7 +15,7 @@
 
 
     <!-- Specify the app servlets.                   -->
-    <servlet path='/MySampleApplicationService' class='com.app.server.AppImpl'/>
+    <servlet path='/MySampleApplicationService' class='com.app.server.impl.AppImpl'/>
     <!-- Specify the paths for translatable code -->
     <source path='client'/>
     <source path='shared'/>

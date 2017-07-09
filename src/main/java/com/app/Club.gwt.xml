@@ -11,7 +11,7 @@
 
 
     <!-- Specify the app servlets.                   -->
-    <servlet path='/Club' class='com.app.server.ClubImpl'/>
+    <servlet path='/Club' class='com.app.server.impl.ClubImpl'/>
 
 
     <source path='client'/>

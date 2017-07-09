@@ -9,7 +9,7 @@ public class Club implements Serializable {
     private static final long serialVersionUID = -8706689714326132798L;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "club_id")
     private int id;
 

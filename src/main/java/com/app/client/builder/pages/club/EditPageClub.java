@@ -1,10 +1,11 @@
 package com.app.client.builder.pages.club;
 
-import com.app.client.ClubIntAsync;
+import com.app.client.interfaces.ClubIntAsync;
 import com.app.client.builder.helper.DoubleClickTable;
 import com.app.shared.Club;
 import com.app.shared.Player;
 import com.google.gwt.core.shared.GWT;
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.History;
@@ -12,6 +13,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 
+import java.util.Collections;
 import java.util.List;
 
 public class EditPageClub extends Composite {
@@ -38,12 +40,13 @@ public class EditPageClub extends Composite {
     private ClubIntAsync dbService;
     private ClubPage clubPage;
 
-    public EditPageClub(ClubPage clubPage, ClubIntAsync dbService) {
+    EditPageClub(ClubPage clubPage, ClubIntAsync dbService) {
         this.dbService = dbService;
         this.clubPage = clubPage;
         setupTable();
         initWidget(uiBinder.createAndBindUi(this));
         clubPage.vertPanel.setVisible(false);
+        clubPage.simplePager.setVisible(false);
         clubPage.table.setVisible(false);
 
         Club club = clubPage.getCurrentClub();
@@ -52,34 +55,48 @@ public class EditPageClub extends Composite {
         int i = clubPage.clubs.indexOf(club);
 
         changeButton.addClickHandler(event -> {
-            final String name = this.name.getText().trim();
+            change(i, club);
+        });
 
-            int id = club.getId();
-            Club b = new Club(name);
-            b.setId(id);
-            dbService.updateClub(b, new AsyncCallback<Void>() {
-                @Override
-                public void onFailure(Throwable caught) {
-                    Window.alert("Problems with update: \n" + caught);
-                }
-
-                @Override
-                public void onSuccess(Void result) {
-                    Window.alert("We update him. ");
-                }
-            });
-            clubPage.clubs.set(i, b);
-            clubPage.table.setText(i + 1, 1, name);
-
-            exit();
+        name.addKeyDownHandler(event ->
+        {
+            if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+                change(i, club);
+            }
         });
 
         exitButton.addClickHandler(event -> {
             //нужно установить новую книгу, чтобы для нее создавался новый класс EditPage
             //иначе просто нельзя будет опять редактировать эту книгу
-            clubPage.clubs.set(i, club);//playerPage.getPlayers.indexOf(currentPlayer) вместо i
+            clubPage.clubs.set(i, club);
             exit();
         });
+    }
+
+    private void change(int i, Club club) {
+        final String name = this.name.getText().trim();
+
+        int id = club.getId();
+        Club b = new Club(name);
+        b.setId(id);
+
+        dbService.updateClub(b, new AsyncCallback<Void>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert("Problems with update: \n" + caught);
+            }
+
+            @Override
+            public void onSuccess(Void result) {
+                Window.alert("Club was updated ");
+            }
+        });
+
+        clubPage.clubs.set(i, b);
+        List<Club> newContactLst = Collections.singletonList(b);
+        clubPage.table.setRowData(i, newContactLst);
+
+        exit();
     }
 
     /**
@@ -89,19 +106,18 @@ public class EditPageClub extends Composite {
         changeButton.setVisible(false);
         clubPage.vertPanel.setVisible(true);
         clubPage.table.setVisible(true);
+        clubPage.simplePager.setVisible(true);
         this.name.setText("");
         RootPanel.get().remove(this);
 
         History.back();
     }
 
-    private List<Player> list;
-
     private void setupTable() {
         gridTable = new DoubleClickTable();
         // создает таблицу
         gridTable.setText(0, 0, "Name of club");
-        gridTable.setText(0, 1, "Players");
+        gridTable.setText(0, 1, "players");
 
         Club club = clubPage.getCurrentClub();
         gridTable.setText(1, 0, club.getName());
@@ -118,6 +134,9 @@ public class EditPageClub extends Composite {
                     Player p = result.get(i);
                     gridTable.setText(i + 1, 1,
                             p.getLastName() + " " + p.getFirstName() + " " + p.getSecondName());
+                }
+                if (result.size() == 0) {
+                    gridTable.setText(1, 1, "no players for this team");
                 }
             }
         });

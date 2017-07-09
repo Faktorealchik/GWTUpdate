@@ -1,7 +1,8 @@
 package com.app.client.builder.pages.player;
 
-import com.app.client.AppIntAsync;
+import com.app.client.interfaces.AppIntAsync;
 import com.app.client.builder.helper.Helper;
+import com.app.shared.Club;
 import com.app.shared.Player;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -12,6 +13,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 
 import java.util.Date;
+import java.util.List;
 
 public class EditPage extends Composite {
     interface EditUIPage extends UiBinder<VerticalPanel, EditPage> {
@@ -50,8 +52,9 @@ public class EditPage extends Composite {
      *
      * @param playerPage мы вызываем текущую книгу(на нее мы нажали)
      *                   и затем мы обновляем ее и ячейку
-     * @param dbService
+     * @param dbService сервис базы данных
      */
+    @SuppressWarnings("deprecation")
     EditPage(PlayerPage playerPage, AppIntAsync dbService) {
 
         setupTable(playerPage);
@@ -67,9 +70,23 @@ public class EditPage extends Composite {
         firstName.setText(currentPlayer.getFirstName());
         secondName.setText(currentPlayer.getSecondName());
         dateBirth.setText(birth);
-//        clubId.addItem();
-        clubId.setText(String.valueOf(currentPlayer.getClubId()));
-        clubId.get
+
+        dbService.getClubs(new AsyncCallback<List<Club>>() {
+            @Override
+            public void onFailure(Throwable caught) {
+
+            }
+
+            @Override
+            public void onSuccess(List<Club> result) {
+                for (Club aResult : result) {
+                    if (currentPlayer.getClubId() == aResult.getId()) {
+                        gridTable.setText(1, 4, aResult.getName());
+                    }
+                    clubId.addItem(aResult.getName(), String.valueOf(aResult.getId()));
+                }
+            }
+        });
 
         int i = playerPage.players.indexOf(currentPlayer);
 
@@ -78,7 +95,7 @@ public class EditPage extends Composite {
             final String firstName = this.firstName.getText().trim();
             final String secondName = this.secondName.getText().trim();
             final String st = helper.formatDate(this.dateBirth.getText());
-            final int clubId = Integer.parseInt(this.clubId.getText());
+            final int clubId = Integer.parseInt(this.clubId.getSelectedValue());
 
             int id = currentPlayer.getId();
             Player b = new Player(lastName, firstName, secondName, new Date(st), clubId);
@@ -91,7 +108,7 @@ public class EditPage extends Composite {
 
                 @Override
                 public void onSuccess(Void result) {
-                    Window.alert("We update him. ");
+                    Window.alert("Player was updated");
                 }
             });
 
@@ -106,9 +123,9 @@ public class EditPage extends Composite {
         });
 
         exitButton.addClickHandler(event -> {
-            //нужно установить новую книгу, чтобы для нее создавался новый класс EditPage
+            //нужно установить нового игрока, чтобы для него создавался новый класс EditPage
             //иначе просто нельзя будет опять редактировать эту книгу
-            playerPage.players.set(i, currentPlayer);//playerPage.getPlayers.indexOf(currentPlayer) вместо i
+            playerPage.players.set(i, currentPlayer);
             exit(playerPage);
         });
     }
@@ -120,9 +137,8 @@ public class EditPage extends Composite {
         changeButton.setVisible(false);
         entityPage.vertPanel.setVisible(true);
         entityPage.table.setVisible(true);
-        helper.clear(this.lastName, this.firstName, this.secondName, this.clubId, this.dateBirth);
+        helper.clear(this.lastName, this.firstName, this.secondName, this.dateBirth);
         RootPanel.get().remove(this);
-
         History.back();
     }
 
@@ -133,7 +149,7 @@ public class EditPage extends Composite {
         gridTable.setText(0, 1, "First name");
         gridTable.setText(0, 2, "Second name");
         gridTable.setText(0, 3, "Date of Birth");
-        gridTable.setText(0, 4, "ID of club");
+        gridTable.setText(0, 4, "Name of club");
 
         Player currentPlayer = playerPage.getCurrentPlayer();
         gridTable.setText(1, 0, currentPlayer.getLastName());
@@ -141,7 +157,6 @@ public class EditPage extends Composite {
         gridTable.setText(1, 2, currentPlayer.getSecondName());
         String birth = helper.formatDate(String.valueOf(currentPlayer.getDateBirth()));
         gridTable.setText(1, 3, birth);
-        gridTable.setText(1, 4, String.valueOf(currentPlayer.getClubId()));
 
         gridTable.setCellPadding(10);
     }
