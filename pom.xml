@@ -81,7 +81,7 @@
         </dependency>
     </dependencies>
 
-g    <build>
+    <build>
         <finalName>gwtProject</finalName>
         <plugins>
             <plugin>
