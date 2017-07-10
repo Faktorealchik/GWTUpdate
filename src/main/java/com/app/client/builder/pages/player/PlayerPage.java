@@ -67,7 +67,7 @@ public class PlayerPage extends Composite {
         dbService.getClubs(new AsyncCallback<List<Club>>() {
             @Override
             public void onFailure(Throwable caught) {
-                Window.alert("Problem with load clubs\n"+caught);
+                Window.alert("Problem with load clubs\n" + caught);
             }
 
             @Override
@@ -96,7 +96,6 @@ public class PlayerPage extends Composite {
 
     /**
      * слушатель на клик по таблице (чекбокс устанавливается)
-     *
      */
     private void createTableHandler() {
         table.addClickHandler(event -> {
@@ -252,7 +251,7 @@ public class PlayerPage extends Composite {
         dbService.getPlayers(new AsyncCallback<List<Player>>() {
             @Override
             public void onFailure(Throwable caught) {
-                Window.alert("error load players\n"+caught);
+                Window.alert("error load players\n" + caught);
             }
 
             @Override
@@ -268,9 +267,11 @@ public class PlayerPage extends Composite {
                     //TODO: костыль, добавляет 2 часа к полученному времени, в результате все нормально
                     //проблема в том, что при получении времени с сервера возвращается на 1 час меньше
                     long dateLong = p.getDateBirth().getTime();
-                    dateLong+=2000*60*60;
-                    String date1= String.valueOf(new Date(dateLong));
+                    //добавляем 23 часа
+                    dateLong += 1000 * 23 * 60 * 60;
+                    String date1 = String.valueOf(new Date(dateLong));
                     String help = helper.formatDate(date1);
+                    p.setDateBirth(new Date(dateLong));
                     //Это все был один костыль
                     table.setText(i + 1, 4, help);
                     table.setText(i + 1, 5, String.valueOf(p.getClubId()));
