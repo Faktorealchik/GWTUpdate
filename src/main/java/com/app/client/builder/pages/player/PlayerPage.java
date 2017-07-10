@@ -265,7 +265,14 @@ public class PlayerPage extends Composite {
                     table.setText(i + 1, 1, p.getLastName());
                     table.setText(i + 1, 2, p.getFirstName());
                     table.setText(i + 1, 3, p.getSecondName());
-                    table.setText(i + 1, 4, helper.formatDate(String.valueOf(p.getDateBirth())));
+                    //TODO: костыль, добавляет 2 часа к полученному времени, в результате все нормально
+                    //проблема в том, что при получении времени с сервера возвращается на 1 час меньше
+                    long dateLong = p.getDateBirth().getTime();
+                    dateLong+=2000*60*60;
+                    String date1= String.valueOf(new Date(dateLong));
+                    String help = helper.formatDate(date1);
+                    //Это все был один костыль
+                    table.setText(i + 1, 4, help);
                     table.setText(i + 1, 5, String.valueOf(p.getClubId()));
                 }
                 if (players.size() > 0 && table.getRowCount() < 2) {
