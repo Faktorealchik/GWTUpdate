@@ -1,7 +1,7 @@
 package com.app.client.builder.pages.player;
 
-import com.app.client.interfaces.AppIntAsync;
 import com.app.client.builder.helper.Helper;
+import com.app.client.interfaces.AppIntAsync;
 import com.app.shared.Club;
 import com.app.shared.Player;
 import com.google.gwt.core.shared.GWT;
@@ -12,6 +12,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -30,12 +31,17 @@ public class EditPage extends Composite {
     @UiField
     TextBox dateBirth;
     @UiField
-    ListBox clubId;
+    ListBox club;
 
     @UiField
     Button changeButton;
     @UiField
     Button exitButton;
+    @UiField
+    Button editButton;
+//    @UiField
+//    Button deleteButton;
+
     @UiField
     VerticalPanel verticalPanel;
     @UiField
@@ -45,6 +51,8 @@ public class EditPage extends Composite {
 
 
     private Helper helper = new Helper();
+    private AppIntAsync dbService;
+    private PlayerPage playerPage;
 
     /**
      * Обновляет ячейку, на которую нажали
@@ -52,19 +60,21 @@ public class EditPage extends Composite {
      *
      * @param playerPage мы вызываем текущую книгу(на нее мы нажали)
      *                   и затем мы обновляем ее и ячейку
-     * @param dbService сервис базы данных
+     * @param dbService  сервис базы данных
      */
     @SuppressWarnings("deprecation")
     EditPage(PlayerPage playerPage, AppIntAsync dbService) {
-
-        setupTable(playerPage);
-        initWidget(uiBinder.createAndBindUi(this));
-        playerPage.vertPanel.setVisible(false);
-        playerPage.table.setVisible(false);
-
-        //TODO: дублирование(сетаптэйбл)
+        this.dbService = dbService;
+        this.playerPage = playerPage;
         Player currentPlayer = playerPage.getCurrentPlayer();
         String birth = helper.formatDate(String.valueOf(currentPlayer.getDateBirth()));
+
+        setupTable(currentPlayer, birth);
+        initWidget(uiBinder.createAndBindUi(this));
+
+        playerPage.panel.setVisible(false);
+        playerPage.vertPanel.setVisible(false);
+        playerPage.table.setVisible(false);
 
         lastName.setText(currentPlayer.getLastName());
         firstName.setText(currentPlayer.getFirstName());
@@ -82,8 +92,9 @@ public class EditPage extends Composite {
                 for (Club aResult : result) {
                     if (currentPlayer.getClubId() == aResult.getId()) {
                         gridTable.setText(1, 4, aResult.getName());
+
                     }
-                    clubId.addItem(aResult.getName(), String.valueOf(aResult.getId()));
+                    club.addItem(aResult.getName(), String.valueOf(aResult.getId()));
                 }
             }
         });
@@ -91,58 +102,71 @@ public class EditPage extends Composite {
         int i = playerPage.players.indexOf(currentPlayer);
 
         changeButton.addClickHandler(event -> {
-            final String lastName = this.lastName.getText().trim();
-            final String firstName = this.firstName.getText().trim();
-            final String secondName = this.secondName.getText().trim();
-            final String st = helper.formatDate(this.dateBirth.getText());
-            final int clubId = Integer.parseInt(this.clubId.getSelectedValue());
+            change(i, currentPlayer);
+        });
 
-            int id = currentPlayer.getId();
-            Player b = new Player(lastName, firstName, secondName, new Date(st), clubId);
-            b.setId(id);
-            dbService.updatePlayer(b, new AsyncCallback<Void>() {
-                @Override
-                public void onFailure(Throwable caught) {
-                    Window.alert("Problems with update: \n" + caught);
-                }
-
-                @Override
-                public void onSuccess(Void result) {
-                    Window.alert("Player was updated");
-                }
-            });
-
-            playerPage.players.set(i, b);
-            playerPage.table.setText(i + 1, 1, lastName);
-            playerPage.table.setText(i + 1, 2, firstName);
-            playerPage.table.setText(i + 1, 3, secondName);
-            playerPage.table.setText(i + 1, 4, st);
-            playerPage.table.setText(i + 1, 5, String.valueOf(clubId));
-
-            exit(playerPage);
+        editButton.addClickHandler(event -> {
+            gridTable.setVisible(false);
+            lastName.setVisible(true);
+            firstName.setVisible(true);
+            secondName.setVisible(true);
+            dateBirth.setVisible(true);
+            club.setVisible(true);
+            changeButton.setVisible(true);
+            editButton.setVisible(false);
         });
 
         exitButton.addClickHandler(event -> {
             //нужно установить нового игрока, чтобы для него создавался новый класс EditPage
             //иначе просто нельзя будет опять редактировать эту книгу
             playerPage.players.set(i, currentPlayer);
-            exit(playerPage);
+            exit();
         });
+    }
+
+    private void change(int i, Player player) {
+        final String lastName = this.lastName.getText().trim();
+        final String firstName = this.firstName.getText().trim();
+        final String secondName = this.secondName.getText().trim();
+        final String st = helper.formatDate(this.dateBirth.getText());
+        final int clubId = Integer.parseInt(this.club.getSelectedValue());
+
+        int id = player.getId();
+        Player p = new Player(lastName, firstName, secondName, new Date(st), clubId);
+        p.setId(id);
+
+        dbService.updatePlayer(p, new AsyncCallback<Void>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert("Problems with update: \n" + caught);
+            }
+
+            @Override
+            public void onSuccess(Void result) {
+                Window.alert("Player was updated ");
+            }
+        });
+
+        playerPage.players.set(i, p);
+        List<Player> newContactLst = Collections.singletonList(p);
+        playerPage.table.setRowData(i, newContactLst);
+        exit();
     }
 
     /**
      * при выходе восстановить прошлые данные, удалить этот класс из RootPanel
      */
-    private void exit(PlayerPage entityPage) {
+    private void exit() {
         changeButton.setVisible(false);
-        entityPage.vertPanel.setVisible(true);
-        entityPage.table.setVisible(true);
+        playerPage.vertPanel.setVisible(true);
+        playerPage.table.setVisible(true);
+        playerPage.panel.setVisible(true);
         helper.clear(this.lastName, this.firstName, this.secondName, this.dateBirth);
         RootPanel.get().remove(this);
         History.back();
     }
 
-    private void setupTable(PlayerPage playerPage) {
+    private void setupTable(Player currentPlayer, String birth) {
         gridTable = new Grid(2, 5);
         // создает таблицу
         gridTable.setText(0, 0, "Last Name");
@@ -151,11 +175,9 @@ public class EditPage extends Composite {
         gridTable.setText(0, 3, "Date of Birth");
         gridTable.setText(0, 4, "Name of club");
 
-        Player currentPlayer = playerPage.getCurrentPlayer();
         gridTable.setText(1, 0, currentPlayer.getLastName());
         gridTable.setText(1, 1, currentPlayer.getFirstName());
         gridTable.setText(1, 2, currentPlayer.getSecondName());
-        String birth = helper.formatDate(String.valueOf(currentPlayer.getDateBirth()));
         gridTable.setText(1, 3, birth);
 
         gridTable.setCellPadding(10);

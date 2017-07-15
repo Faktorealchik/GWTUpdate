@@ -7,28 +7,29 @@
 
     <g:VerticalPanel ui:field="verticalPanel" verticalAlignment="ALIGN_TOP" width="100%"
                      horizontalAlignment="ALIGN_CENTER" styleName="{style.verticalPanel}">
-        <g:Grid ui:field="gridTable" width="100%" borderWidth="0" styleName="{style.flextable}"/>
+        <g:ScrollPanel height="250px"/>
 
-        <g:ScrollPanel height="210px"/>
+        <g:Grid ui:field="gridTable" width="100%" borderWidth="0" styleName="{style.flextable}"/>
 
         <g:HTMLPanel ui:field="htmlpanel" width="50%" >
             <div>
-                <g:TextBox ui:field="lastName" styleName="{style.input}"/>
+                <g:TextBox ui:field="lastName" visible="false" styleName="{style.input}"/>
             </div>
             <div>
-                <g:TextBox ui:field="firstName" styleName="{style.input}"/>
+                <g:TextBox ui:field="firstName" visible="false" styleName="{style.input}"/>
             </div>
             <div>
-                <g:TextBox ui:field="secondName" styleName="{style.input}"/>
+                <g:TextBox ui:field="secondName" visible="false" styleName="{style.input}"/>
             </div>
             <div>
-                <g:TextBox ui:field="dateBirth" styleName="{style.input}"/>
+                <g:TextBox ui:field="dateBirth" visible="false" styleName="{style.input}"/>
             </div>
             <div>
-                <g:ListBox ui:field="clubId" styleName="{style.styled-select}"/>
+                <g:ListBox ui:field="club" visible="false" styleName="{style.styled-select}"/>
             </div>
         </g:HTMLPanel>
-        <g:Button ui:field="changeButton" text="change" styleName="{style.button}" width="50%" visible="true"/>
+        <g:Button ui:field="editButton" text="edit" styleName="{style.button}" width="50%" visible="true"/>
+        <g:Button ui:field="changeButton" text="change" styleName="{style.button}" width="50%" visible="false"/>
         <g:Button ui:field="exitButton" text="exit" styleName="{style.button}" width="50%" visible="true"/>
     </g:VerticalPanel>
 </ui:UiBinder>

@@ -1,3 +1,4 @@
 .idea
 target
 *.iml
+hibernate.cfg.xml

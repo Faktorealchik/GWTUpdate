@@ -1,32 +1,18 @@
 package com.app.server.impl;
 
 import com.app.client.interfaces.ClubInt;
-import com.app.server.HibernateUtil;
 import com.app.server.dao.ClubDao;
 import com.app.shared.Club;
 import com.app.shared.Player;
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 import java.util.List;
 
-public class ClubImpl extends RemoteServiceServlet implements ClubInt {
-    private ImplHelper helper;
-
+public class ClubImpl extends Impl implements ClubInt {
     public ClubImpl() {
-        sessionFactory = HibernateUtil.getSessionFactory();
-        helper = new ImplHelper(sessionFactory);
-    }
-
-    private SessionFactory sessionFactory;
-    private int count = 0;
-
-    @Override
-    public List<Club> getClubs() {
-        return helper.getClubs();
+        super();
     }
 
     @Override
@@ -36,12 +22,13 @@ public class ClubImpl extends RemoteServiceServlet implements ClubInt {
             ClubDao dao = new ClubDao(session);
             dao.insertClub(club);
             session.close();
-            count = 0;
         } catch (HibernateException e) {
-            count++;
-            if (count > 2) return;
-            sessionFactory = helper.reconnect(e);
-            insertClub(club);
+            try {
+                reconnect(e);
+                insertClub(club);
+            } catch (Exception e1) {
+                return;
+            }
         }
     }
 
@@ -54,12 +41,13 @@ public class ClubImpl extends RemoteServiceServlet implements ClubInt {
             dao.updateClub(club);
             transaction.commit();
             session.close();
-            count = 0;
         } catch (HibernateException e) {
-            count++;
-            if (count > 2) return;
-            sessionFactory = helper.reconnect(e);
-            updateClub(club);
+            try {
+                reconnect(e);
+                updateClub(club);
+            } catch (Exception e1) {
+                return;
+            }
         }
     }
 
@@ -72,12 +60,13 @@ public class ClubImpl extends RemoteServiceServlet implements ClubInt {
             dao.deleteClub(id);
             transaction.commit();
             session.close();
-            count = 0;
         } catch (HibernateException e) {
-            count++;
-            if (count > 2) return;
-            sessionFactory = helper.reconnect(e);
-            deleteClub(id);
+            try {
+                reconnect(e);
+                deleteClub(id);
+            } catch (Exception e1) {
+                return;
+            }
         }
     }
 
@@ -88,13 +77,14 @@ public class ClubImpl extends RemoteServiceServlet implements ClubInt {
             ClubDao dao = new ClubDao(session);
             List<Player> playersForClub = dao.getPlayersForClub(club);
             session.close();
-            count = 0;
             return playersForClub;
         } catch (HibernateException e) {
-            count++;
-            if (count > 2) return null;
-            sessionFactory = helper.reconnect(e);
-            return getPlayersForClub(club);
+            try {
+                reconnect(e);
+                return getPlayersForClub(club);
+            } catch (Exception e1) {
+                return null;
+            }
         }
     }
 
@@ -105,19 +95,15 @@ public class ClubImpl extends RemoteServiceServlet implements ClubInt {
             ClubDao clubDao = new ClubDao(session);
             Club club = clubDao.insertClub(new Club(name));
             session.close();
-            count = 0;
             return club;
         } catch (HibernateException e) {
-            count++;
-            if (count > 2) return null;
-            sessionFactory = helper.reconnect(e);
-            addClub(name);
+            try {
+                reconnect(e);
+                addClub(name);
+            } catch (Exception e1) {
+                return null;
+            }
         }
         return null;
-    }
-
-    @Override
-    public Club getClub(int id) {
-        return helper.getClub(id);
     }
 }

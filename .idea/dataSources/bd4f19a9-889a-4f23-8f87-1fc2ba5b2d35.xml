@@ -2,67 +2,71 @@
 <dataSource name="hibernate.cfg.xml/Hibernate">
   <database-model serializer="dbm" rdbms="MYSQL" format-version="4.0">
     <root id="1"/>
-    <schema id="2" parent="1" name="asresh4w_gwttest">
+    <schema id="2" parent="1" name="information_schema"/>
+    <schema id="3" parent="1" name="test">
       <Current>1</Current>
       <Visible>1</Visible>
     </schema>
-    <schema id="3" parent="1" name="information_schema"/>
-    <table id="4" parent="2" name="club"/>
-    <table id="5" parent="2" name="player"/>
-    <column id="6" parent="4" name="club_id">
+    <schema id="4" parent="1" name="bookmanager"/>
+    <schema id="5" parent="1" name="contactmanager"/>
+    <schema id="6" parent="1" name="mission3"/>
+    <schema id="7" parent="1" name="monitor"/>
+    <schema id="8" parent="1" name="monitoring"/>
+    <schema id="9" parent="1" name="mysql"/>
+    <schema id="10" parent="1" name="performance_schema"/>
+    <schema id="11" parent="1" name="sakila"/>
+    <schema id="12" parent="1" name="sys"/>
+    <schema id="13" parent="1" name="systemtranslating"/>
+    <schema id="14" parent="1" name="world"/>
+    <table id="15" parent="3" name="club"/>
+    <table id="16" parent="3" name="player"/>
+    <column id="17" parent="15" name="club_id">
       <Position>1</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="7" parent="4" name="name">
+    <column id="18" parent="15" name="name">
       <Position>2</Position>
       <DataType>varchar(45)|0</DataType>
     </column>
-    <key id="8" parent="4" name="PRIMARY">
-      <ColNames>club_id</ColNames>
-      <Primary>1</Primary>
-    </key>
-    <column id="9" parent="5" name="id">
-      <Position>1</Position>
-      <DataType>int(11)|0</DataType>
-      <NotNull>1</NotNull>
-      <SequenceIdentity>1</SequenceIdentity>
-    </column>
-    <column id="10" parent="5" name="lastName">
-      <Position>2</Position>
-      <DataType>varchar(45)|0</DataType>
-    </column>
-    <column id="11" parent="5" name="firstName">
+    <column id="19" parent="15" name="id">
       <Position>3</Position>
       <DataType>varchar(45)|0</DataType>
     </column>
-    <column id="12" parent="5" name="secondName">
+    <key id="20" parent="15" name="PRIMARY">
+      <ColNames>club_id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="21" parent="16" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="22" parent="16" name="lastName">
+      <Position>2</Position>
+      <DataType>varchar(45)|0</DataType>
+    </column>
+    <column id="23" parent="16" name="firstName">
+      <Position>3</Position>
+      <DataType>varchar(45)|0</DataType>
+    </column>
+    <column id="24" parent="16" name="secondName">
       <Position>4</Position>
       <DataType>varchar(45)|0</DataType>
     </column>
-    <column id="13" parent="5" name="dateBirth">
+    <column id="25" parent="16" name="dateBirth">
       <Position>5</Position>
       <DataType>date|0</DataType>
     </column>
-    <column id="14" parent="5" name="clubId">
+    <column id="26" parent="16" name="clubId">
       <Position>6</Position>
       <DataType>int(11)|0</DataType>
     </column>
-    <index id="15" parent="5" name="club_id_idx">
-      <ColNames>clubId</ColNames>
-    </index>
-    <key id="16" parent="5" name="PRIMARY">
+    <key id="27" parent="16" name="PRIMARY">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="17" parent="5" name="club_id">
-      <ColNames>clubId</ColNames>
-      <RefSchemaName>asresh4w_gwttest</RefSchemaName>
-      <RefTableName>club</RefTableName>
-      <RefColNames>club_id</RefColNames>
-      <OnUpdate>update</OnUpdate>
-      <OnDelete>delete</OnDelete>
-    </foreign-key>
   </database-model>
 </dataSource>

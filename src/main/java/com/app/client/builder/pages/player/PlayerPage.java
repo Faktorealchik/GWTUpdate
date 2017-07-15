@@ -1,29 +1,29 @@
 package com.app.client.builder.pages.player;
 
-import com.app.client.interfaces.AppIntAsync;
-import com.app.client.builder.helper.DoubleClickTable;
 import com.app.client.builder.helper.Helper;
+import com.app.client.interfaces.AppIntAsync;
 import com.app.shared.Club;
 import com.app.shared.Player;
 import com.google.gwt.core.shared.GWT;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.SimplePager;
+import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.ui.*;
+import com.google.gwt.view.client.AsyncDataProvider;
+import com.google.gwt.view.client.HasData;
+import com.google.gwt.view.client.SingleSelectionModel;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 
-public class PlayerPage extends Composite {
-
-
-    @UiField(provided = true)
-    DoubleClickTable table; //FlexTable
+public class PlayerPage extends Composite implements RemoteService {
 
     @UiField
     TextBox lastName;
@@ -33,30 +33,44 @@ public class PlayerPage extends Composite {
     TextBox secondName;
     @UiField
     TextBox dateBirth;
+
     @UiField
     ListBox clubId;
+    @UiField
+    HTMLPanel panel; //таблица
+    @UiField
+    HTMLPanel htmlPanel; //текстбоксы
 
+    @UiField
+    Button editPlayer;
+    @UiField
+    Button addNewPlayer;
+    @UiField
+    Button exitButton;
     @UiField
     Button addButton;
     @UiField
-    Button deleteActive;
+    Button deleteButton;
     @UiField
-    public VerticalPanel vertPanel;
+    VerticalPanel vertPanel;
 
-    private Player currentPlayer;
-    List<Player> players = new LinkedList<>();
-    private Helper helper = new Helper();
     private AppIntAsync dbService;
+    List<Player> players = new ArrayList<>();
+    private Helper helper;
+    CellTable<Player> table;
+    SimplePager simplePager;
+    private Player currentPlayer;
 
-    /**
-     * В конструкторе устанавливаем таблицу,
-     * добавляем слушателей ко всем кнопкам.
-     *
-     * @param dbService сервис БД
-     */
     public PlayerPage(AppIntAsync dbService) {
         this.dbService = dbService;
+
+        table = new CellTable<>();
+
+        //теперь можем выбирать элементы.
+        SingleSelectionModel<Player> selectionModel = new SingleSelectionModel<>();
+        table.setSelectionModel(selectionModel);
         setupTable();
+        helper = new Helper();
         initWidget(uiBinder.createAndBindUi(this));
 
         lastName.getElement().setAttribute("placeholder", "Last name");
@@ -64,139 +78,76 @@ public class PlayerPage extends Composite {
         secondName.getElement().setAttribute("placeholder", "Second name");
         dateBirth.getElement().setAttribute("placeholder", "Date of birth");
 
-        dbService.getClubs(new AsyncCallback<List<Club>>() {
-            @Override
-            public void onFailure(Throwable caught) {
-                Window.alert("Problem with load clubs\n" + caught);
-            }
+        simplePager = new SimplePager();
+        simplePager.setDisplay(table);
 
-            @Override
-            public void onSuccess(List<Club> result) {
-                for (Club aResult : result) {
-                    clubId.addItem(aResult.getName(), String.valueOf(aResult.getId()));
-                }
+        panel.add(table);
+        panel.add(simplePager);
+
+        deleteButton.addClickHandler(event -> {
+            String st = Window.prompt("Are you shure? Yes/no", "Yes");
+            if (st.equalsIgnoreCase("yes")) {
+                Player selectedObject = selectionModel.getSelectedObject();
+                dbService.deletePlayer(selectedObject, new AsyncCallback<Void>() {
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        Window.alert("problems\n" + caught);
+                    }
+
+                    @Override
+                    public void onSuccess(Void result) {
+                        players.remove(selectedObject);
+                        table.setRowData(players);
+                        table.setPageSize(20);
+                        Window.alert("Player was deleted");
+                    }
+                });
+            }
+        });
+
+        editPlayer.addClickHandler(event -> {
+            Player selected = selectionModel.getSelectedObject();
+            if (selected != null) {
+                setCurrentPlayer(selected);
+                History.newItem("EditPage");
+                RootPanel.get().add(new EditPage(this, dbService));
+            } else {
+                Window.alert("Please select player ");
             }
         });
 
-
-        createDoubleClickHandler();
-        createTableHandler();
-
-        clubId.addKeyDownHandler(event ->
-        {
-            if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-                addRow();
-            }
+        addButton.addClickHandler(event -> {
+            panel.setVisible(true);
+            addButton.setVisible(false);
+            exitButton.setVisible(false);
+            addNewPlayer.setVisible(true);
+            htmlPanel.setVisible(false);
+            editPlayer.setVisible(true);
+            deleteButton.setVisible(true);
+            addRow();
         });
 
-        addButton.addClickHandler(event -> addRow());
-
-        setDeleteHandler();
-    }
-
-    /**
-     * слушатель на клик по таблице (чекбокс устанавливается)
-     */
-    private void createTableHandler() {
-        table.addClickHandler(event -> {
-            HTMLTable.Cell cell = table.getCellForEvent(event);
-            int rowIndex = cell.getRowIndex();
-            int cellIndex = cell.getCellIndex();
-
-            CheckBox checkBox = (CheckBox) table.getWidget(rowIndex, 0);
-
-            //если клинкнули на сам чекбокс(так как он меняется сам, то ничего не делаем
-            //но, если нажимать на ячейку 0, рядом с ним, то меняться не будет тоже.
-            if (cellIndex == 0) {
-                return;
-            }
-
-            if (rowIndex > 0) {
-                if (checkBox.getValue()) {
-                    checkBox.setValue(false);
-                } else {
-                    checkBox.setValue(true);
-                }
-                table.setWidget(rowIndex, 0, checkBox);
-            }
+        addNewPlayer.addClickHandler(event -> {
+            panel.setVisible(false);
+            htmlPanel.setVisible(true);
+            exitButton.setVisible(true);
+            editPlayer.setVisible(false);
+            addButton.setVisible(true);
+            addNewPlayer.setVisible(false);
+            deleteButton.setVisible(false);
         });
-    }
 
-    /**
-     * устанавливаем слушателя на клик по
-     * кнопке "удалить активные"
-     */
-    private void setDeleteHandler() {
-        deleteActive.addClickHandler(event ->
-        {
-            for (int i = 1; i < table.getRowCount(); i++) {
-                CheckBox checkBox = (CheckBox) table.getWidget(i, 0);
-                if (checkBox.getValue()) {
-                    String lastName = table.getText(i, 1);
-                    String firstName = table.getText(i, 2);
-                    String secondName = table.getText(i, 3);
-                    table.removeRow(i);
-                    Player b = new Player();
-                    b.setLastName(lastName);
-                    b.setFirstName(firstName);
-                    b.setSecondName(secondName);
-                    int id = players.indexOf(b);
-                    b = players.get(id);
-                    players.remove(b);
-                    dbService.deletePlayer(b, new AsyncCallback<Void>() {
-                        @Override
-                        public void onFailure(Throwable caught) {
-                            Window.alert("problems" + caught);
-                        }
-
-                        @Override
-                        public void onSuccess(Void result) {
-                            Window.alert("Player was deleted");
-                        }
-                    });
-                    i--;
-                }
-            }
+        exitButton.addClickHandler(event -> {
+            editPlayer.setVisible(true);
+            deleteButton.setVisible(true);
+            htmlPanel.setVisible(false);
+            panel.setVisible(true);
+            addButton.setVisible(false);
+            exitButton.setVisible(false);
+            addNewPlayer.setVisible(true);
         });
     }
 
-
-    /**
-     * Устанавливаем слушателя на двойной клик
-     * получаем строку, на которую кликнули
-     * получаем книгу из строки
-     * отсылаем запрос на обновление этой книги
-     */
-    private HandlerRegistration createDoubleClickHandler() {
-        return table.addDoubleClickHandler(event -> {
-            HTMLTable.Cell cell = table.getCellForEvent(event);
-            int rowIndex = cell.getRowIndex();
-
-            String lastName = table.getText(rowIndex, 1);
-            String firstName = table.getText(rowIndex, 2);
-            String secondName = table.getText(rowIndex, 3);
-            Player curPlayer = new Player();
-            curPlayer.setLastName(lastName);
-            curPlayer.setFirstName(firstName);
-            curPlayer.setSecondName(secondName);
-
-            int i = players.indexOf(curPlayer);
-
-            curPlayer = players.get(i);
-
-            History.newItem("EditPage");
-
-            setCurrentPlayer(curPlayer);
-            RootPanel.get().add(new EditPage(this, dbService));
-        });
-    }
-
-
-    /**
-     * проверяем на валидность(существует ли книга, корректно ли все введено)
-     * добавляем в массив книг
-     * добавляем строчку в таблице
-     */
     @SuppressWarnings("deprecation")
     private void addRow() {
         final String lastName = this.lastName.getText().trim();
@@ -214,77 +165,102 @@ public class PlayerPage extends Composite {
 
             @Override
             public void onSuccess(Player result) {
-                if (result == null) {
-                    Window.alert("this club not exist or other error");
-                } else {
-                    Window.alert("ok");
-                    //TODO: добавить проверку на уже существующего
-                    int row = table.getRowCount();
-                    table.setWidget(row, 0, new CheckBox());
-                    table.setText(row, 1, lastName);
-                    table.setText(row, 2, firstName);
-                    table.setText(row, 3, secondName);
-                    table.setText(row, 4, dateBirth);
-                    table.setText(row, 5, String.valueOf(clubId));
-                    players.add(result);
-                }
+                Window.alert("Player added successful");
+                Window.Location.reload();
             }
         });
 
         helper.clear(this.lastName, this.firstName, this.secondName, this.dateBirth);
     }
 
-
-    /**
-     * Создаем таблицу
-     */
     private void setupTable() {
-        table = new DoubleClickTable();
-        table.setText(0, 0, "");
-        table.setText(0, 1, "Last name");
-        table.setText(0, 2, "First name");
-        table.setText(0, 3, "Second name");
-        table.setText(0, 4, "Date of birth");
-        table.setText(0, 5, "Club id");
+        table.setPageSize(20);
+        table.setWidth("50%");
 
+
+        TextColumn<Player> playerId = new TextColumn<Player>() {
+            @Override
+            public String getValue(Player p) {
+                return String.valueOf(p.getId());
+            }
+        };
+        table.addColumn(playerId, "ID of player");
+
+        TextColumn<Player> lastName = new TextColumn<Player>() {
+            @Override
+            public String getValue(Player p) {
+                return p.getLastName();
+            }
+        };
+        table.addColumn(lastName, "Last name");
+
+        TextColumn<Player> firstName = new TextColumn<Player>() {
+            @Override
+            public String getValue(Player p) {
+                return p.getFirstName();
+            }
+        };
+        table.addColumn(firstName, "First name");
+
+        TextColumn<Player> secondName = new TextColumn<Player>() {
+            @Override
+            public String getValue(Player p) {
+                return p.getSecondName();
+            }
+        };
+        table.addColumn(secondName, "Second name");
+
+        TextColumn<Player> dateBirth = new TextColumn<Player>() {
+            @Override
+            public String getValue(Player p) {
+                return helper.formatDate(String.valueOf(p.getDateBirth()));
+            }
+        };
+        table.addColumn(dateBirth, "Date of birth");
+
+        TextColumn<Player> id = new TextColumn<Player>() {
+            @Override
+            public String getValue(Player p) {
+                return String.valueOf(p.getClubId());
+            }
+        };
+        table.addColumn(id, "Club id");
 
         dbService.getPlayers(new AsyncCallback<List<Player>>() {
             @Override
             public void onFailure(Throwable caught) {
-                Window.alert("error load players\n" + caught);
+                Window.alert("Error load players\n" + caught);
             }
 
             @Override
             public void onSuccess(List<Player> result) {
                 players = result;
-                for (int i = 0; i < result.size(); i++) {
-                    Player p = result.get(i);
+                AsyncDataProvider<Player> provider = new AsyncDataProvider<Player>() {
+                    @Override
+                    protected void onRangeChanged(HasData<Player> display) {
+                        updateRowData(0, players);
+                    }
+                };
 
-                    table.setWidget(i + 1, 0, new CheckBox());
-                    table.setText(i + 1, 1, p.getLastName());
-                    table.setText(i + 1, 2, p.getFirstName());
-                    table.setText(i + 1, 3, p.getSecondName());
-                    //TODO: костыль, добавляет 2 часа к полученному времени, в результате все нормально
-                    //проблема в том, что при получении времени с сервера возвращается на 1 час меньше
-                    long dateLong = p.getDateBirth().getTime();
-                    //добавляем 23 часа
-                    dateLong += 1000 * 23 * 60 * 60;
-                    String date1 = String.valueOf(new Date(dateLong));
-                    String help = helper.formatDate(date1);
-                    p.setDateBirth(new Date(dateLong));
-                    //Это все был один костыль
-                    table.setText(i + 1, 4, help);
-                    table.setText(i + 1, 5, String.valueOf(p.getClubId()));
-                }
-                if (players.size() > 0 && table.getRowCount() < 2) {
-                    Window.Location.reload();
-                }
+                provider.addDataDisplay(table);
+                provider.updateRowCount(players.size(), true);
+
+                dbService.getClubs(new AsyncCallback<List<Club>>() {
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        Window.alert("Problem with load clubs\n" + caught);
+                    }
+
+                    @Override
+                    public void onSuccess(List<Club> result) {
+                        for (Club aResult : result) {
+                            clubId.addItem(aResult.getName(), String.valueOf(aResult.getId()));
+                        }
+                    }
+                });
             }
         });
-
-        table.setCellPadding(10);
     }
-
 
     Player getCurrentPlayer() {
         return currentPlayer;
@@ -298,5 +274,6 @@ public class PlayerPage extends Composite {
     interface PlayerUIPage extends UiBinder<VerticalPanel, PlayerPage> {
     }
 
-    private static PlayerPage.PlayerUIPage uiBinder = GWT.create(PlayerPage.PlayerUIPage.class);
+    private static PlayerUIPage uiBinder = GWT.create(PlayerUIPage.class);
+
 }

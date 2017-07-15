@@ -12,14 +12,39 @@
       <resolve-scope>asresh4w_gwttest:</resolve-scope>
     </data-source>
     <data-source name="hibernate.cfg.xml/Hibernate" uuid="bd4f19a9-889a-4f23-8f87-1fc2ba5b2d35">
-      <database-info product="MySQL" version="5.7.18-15-beget-5.7.18-15-2-3-log" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.40 ( Revision: 402933ef52cad9aa82624e80acbea46e3a701ce6 )">
+      <database-info product="MySQL" version="5.7.17-log" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.40 ( Revision: 402933ef52cad9aa82624e80acbea46e3a701ce6 )">
         <extra-name-characters>#@</extra-name-characters>
         <identifier-quote-string>`</identifier-quote-string>
       </database-info>
-      <case-sensitivity plain-identifiers="exact" quoted-identifiers="exact" />
+      <case-sensitivity plain-identifiers="lower" quoted-identifiers="lower" />
       <secret-storage>master_key</secret-storage>
-      <user-name>asresh4w_gwttest</user-name>
+      <user-name>root</user-name>
       <resolve-scope>asresh4w_gwttest:</resolve-scope>
+    </data-source>
+    <data-source name="test@localhost" uuid="ca7e90cb-a8aa-4cb8-a5f1-32f5133c2b87">
+      <database-info product="MySQL" version="5.7.17-log" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.40 ( Revision: 402933ef52cad9aa82624e80acbea46e3a701ce6 )">
+        <extra-name-characters>#@</extra-name-characters>
+        <identifier-quote-string>`</identifier-quote-string>
+      </database-info>
+      <case-sensitivity plain-identifiers="lower" quoted-identifiers="lower" />
+      <secret-storage>master_key</secret-storage>
+      <user-name>root</user-name>
+      <resolve-scope>test:</resolve-scope>
+    </data-source>
+    <data-source name="test@localhost [2]" uuid="b5fa5489-492e-4303-b17a-ec5b2c99e797">
+      <database-info product="MySQL" version="5.7.17-log" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.40 ( Revision: 402933ef52cad9aa82624e80acbea46e3a701ce6 )">
+        <extra-name-characters>#@</extra-name-characters>
+        <identifier-quote-string>`</identifier-quote-string>
+      </database-info>
+      <case-sensitivity plain-identifiers="lower" quoted-identifiers="lower" />
+      <secret-storage>master_key</secret-storage>
+      <user-name>root</user-name>
+      <resolve-scope>test:</resolve-scope>
+    </data-source>
+    <data-source name="@localhost" uuid="61da43f7-da80-497c-b9d0-4336c6a52c2e">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" />
+      <secret-storage>master_key</secret-storage>
+      <first-sync>true</first-sync>
     </data-source>
   </component>
 </project>

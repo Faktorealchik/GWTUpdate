@@ -3,13 +3,11 @@ package com.app.server;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-/**
- * Created by Александр on 09.07.2017.
- */
+
 public class HibernateListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-        HibernateUtil.getSessionFactory(); // Just call the static initializer of that class
+        HibernateUtil.getSessionFactory();
     }
 
     @Override

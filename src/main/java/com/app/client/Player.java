@@ -7,7 +7,7 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.RootPanel;
 
-public class App implements EntryPoint {
+public class Player implements EntryPoint {
     public void onModuleLoad() {
         AppIntAsync dbService = GWT.create(AppInt.class);
 

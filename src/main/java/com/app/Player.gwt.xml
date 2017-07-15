@@ -4,18 +4,16 @@
 
     <!-- Inherit the core Web Toolkit stuff.                  -->
     <inherits name='com.google.gwt.user.User'/>
-    <inherits name="com.app.App"/>
+    <inherits name="com.app.Player"/>
     <inherits name="com.google.gwt.i18n.I18N"/>
     <inherits name="com.google.gwt.user.UI"/>
     <inherits name="com.google.gwt.uibinder.UiBinder"/>
 
     <!-- Specify the app entry point class.                   -->
-    <entry-point class='com.app.client.App'/>
-
-
+    <entry-point class='com.app.client.Player'/>
 
     <!-- Specify the app servlets.                   -->
-    <servlet path='/MySampleApplicationService' class='com.app.server.impl.AppImpl'/>
+    <servlet path='/MySampleApplicationService' class='com.app.server.impl.PlayerImpl'/>
     <!-- Specify the paths for translatable code -->
     <source path='client'/>
     <source path='shared'/>

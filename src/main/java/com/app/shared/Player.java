@@ -112,12 +112,12 @@ public class Player implements Serializable {
     @Override
     public String toString() {
         return "Player{" +
-                "id=" + id +
-                ", lastName='" + lastName + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", secondName='" + secondName + '\'' +
-                ", dateBirth=" + dateBirth +
-                ", clubId=" + clubId +
-                "}\n";
+            "id=" + id +
+            ", lastName='" + lastName + '\'' +
+            ", firstName='" + firstName + '\'' +
+            ", secondName='" + secondName + '\'' +
+            ", dateBirth=" + dateBirth +
+            ", clubId=" + clubId +
+            "}\n";
     }
 }

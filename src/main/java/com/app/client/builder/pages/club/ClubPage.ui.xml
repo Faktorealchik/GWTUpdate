@@ -11,8 +11,11 @@
 
         <g:VerticalPanel ui:field="vertPanel" spacing="10" verticalAlignment="ALIGN_TOP" width="50%">
             <!--<c:SimplePager ui:field="test"/>-->
-            <g:TextBox ui:field="name" styleName="{style.input}"/>
-            <g:Button ui:field="addButton" text="add" styleName="{style.button}" width="100%"/>
+            <g:TextBox ui:field="name" styleName="{style.input}" visible="false"/>
+            <g:Button ui:field="editClub" text="view club" styleName="{style.button}" width="100%"/>
+            <g:Button ui:field="addNewClub" text="add club" styleName="{style.button}" width="100%"/>
+            <g:Button ui:field="addButton" text="add" styleName="{style.button}" width="100%" visible="false"/>
+            <g:Button ui:field="exit" text="exit without add" styleName="{style.button}" width="100%" visible="false"/>
             <g:Button ui:field="delete" text="delete" styleName="{style.button}" width="100%"/>
             <g:Button ui:field="changeButton" text="change name of club" styleName="{style.button}" width="100%"
                       visible="false"/>

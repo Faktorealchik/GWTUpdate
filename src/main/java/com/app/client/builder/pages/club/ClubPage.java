@@ -1,15 +1,12 @@
 package com.app.client.builder.pages.club;
 
-import com.app.client.interfaces.ClubIntAsync;
 import com.app.client.builder.helper.Helper;
+import com.app.client.interfaces.ClubIntAsync;
 import com.app.shared.Club;
-import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.core.shared.GWT;
-import com.google.gwt.event.dom.client.DoubleClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.History;
@@ -19,7 +16,6 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
-import com.google.gwt.view.client.SelectionModel;
 import com.google.gwt.view.client.SingleSelectionModel;
 
 import java.util.ArrayList;
@@ -35,7 +31,13 @@ public class ClubPage extends Composite implements RemoteService {
     @UiField
     Button addButton;
     @UiField
+    Button exit;
+    @UiField
+    Button editClub;
+    @UiField
     Button delete;
+    @UiField
+    Button addNewClub;
     @UiField
     VerticalPanel vertPanel;
 
@@ -52,10 +54,9 @@ public class ClubPage extends Composite implements RemoteService {
         table = new CellTable<>();
 
         //теперь можем выбирать элементы.
-        SingleSelectionModel<Club> selectionModel = new SingleSelectionModel<Club>();
+        SingleSelectionModel<Club> selectionModel = new SingleSelectionModel<>();
         table.setSelectionModel(selectionModel);
-
-        setupTable(selectionModel);
+        setupTable();
         helper = new Helper();
 
         initWidget(uiBinder.createAndBindUi(this));
@@ -65,24 +66,47 @@ public class ClubPage extends Composite implements RemoteService {
         panel.add(table);
         panel.add(simplePager);
 
-        table.addDomHandler(
-            event -> {
-                Club selected = selectionModel.getSelectedObject();
-                if (selected != null) {
-                    setCurrentClub(selected);
-
-                    History.newItem("EditPage");
-                    RootPanel.get().add(new EditPageClub(this, dbService));
-                }
-            },
-            DoubleClickEvent.getType());
-
-        addButton.addClickHandler(event -> {
-            addRow();
+        editClub.addClickHandler(event -> {
+            Club selected = selectionModel.getSelectedObject();
+            if (selected != null) {
+                setCurrentClub(selected);
+                History.newItem("EditPage");
+                RootPanel.get().add(new EditPageClub(this, dbService));
+            } else {
+                Window.alert("Please select club ");
+            }
         });
 
+        addNewClub.addClickHandler(event -> {
+            name.setValue("name of club");
+            addButton.setVisible(true);
+            name.setVisible(true);
+            exit.setVisible(true);
+            panel.setVisible(false);
+            addNewClub.setVisible(false);
+            editClub.setVisible(false);
+            delete.setVisible(false);
+        });
+        addButton.addClickHandler(event -> addRow());
+
+        exit.addClickHandler(event -> {
+            editClub.setVisible(true);
+            delete.setVisible(true);
+            panel.setVisible(true);
+            addNewClub.setVisible(true);
+            exit.setVisible(false);
+            addButton.setVisible(false);
+            name.setVisible(false);
+        });
 
         delete.addClickHandler(event -> {
+            editClub.setVisible(true);
+            delete.setVisible(true);
+            panel.setVisible(true);
+            addNewClub.setVisible(true);
+            exit.setVisible(false);
+            addButton.setVisible(false);
+            name.setVisible(false);
             Club selectedObject = selectionModel.getSelectedObject();
             dbService.deleteClub(selectedObject.getId(), new AsyncCallback<Void>() {
                 @Override
@@ -94,7 +118,7 @@ public class ClubPage extends Composite implements RemoteService {
                 public void onSuccess(Void result) {
                     clubs.remove(selectedObject);
                     table.setRowData(clubs);
-                    table.setPageSize(5);
+                    table.setPageSize(20);
                     Window.alert("Club was deleted");
                 }
             });
@@ -120,18 +144,9 @@ public class ClubPage extends Composite implements RemoteService {
         helper.clear(this.name);
     }
 
-    private void setupTable(final SelectionModel<Club> selectionModel) {
-        table.setPageSize(5);
+    private void setupTable() {
+        table.setPageSize(20);
         table.setWidth("50%");
-
-        Column<Club, Boolean> checkColumn = new Column<Club, Boolean>(
-            new CheckboxCell(true, false)) {
-            @Override
-            public Boolean getValue(Club object) {
-                return selectionModel.isSelected(object);
-            }
-        };
-        table.addColumn(checkColumn);
 
         TextColumn<Club> clubId = new TextColumn<Club>() {
             @Override
@@ -152,7 +167,7 @@ public class ClubPage extends Composite implements RemoteService {
         dbService.getClubs(new AsyncCallback<List<Club>>() {
             @Override
             public void onFailure(Throwable caught) {
-                Window.alert("Error load clubs\n"+caught);
+                Window.alert("Error load clubs\n" + caught);
             }
 
             @Override

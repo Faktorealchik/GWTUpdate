@@ -1,7 +1,6 @@
 package com.app.client.builder.pages.club;
 
 import com.app.client.interfaces.ClubIntAsync;
-import com.app.client.builder.helper.DoubleClickTable;
 import com.app.shared.Club;
 import com.app.shared.Player;
 import com.google.gwt.core.shared.GWT;
@@ -31,11 +30,13 @@ public class EditPageClub extends Composite {
     @UiField
     Button exitButton;
     @UiField
+    Button editButton;
+    @UiField
     VerticalPanel verticalPanel;
     @UiField
     HTMLPanel htmlpanel;
     @UiField(provided = true)
-    DoubleClickTable gridTable;
+    FlexTable gridTable;
 
     private ClubIntAsync dbService;
     private ClubPage clubPage;
@@ -48,13 +49,16 @@ public class EditPageClub extends Composite {
         clubPage.vertPanel.setVisible(false);
         clubPage.simplePager.setVisible(false);
         clubPage.table.setVisible(false);
-
         Club club = clubPage.getCurrentClub();
         name.setText(club.getName());
 
         int i = clubPage.clubs.indexOf(club);
 
         changeButton.addClickHandler(event -> {
+            editButton.setVisible(true);
+            gridTable.setVisible(true);
+            name.setVisible(false);
+            changeButton.setVisible(false);
             change(i, club);
         });
 
@@ -64,6 +68,14 @@ public class EditPageClub extends Composite {
                 change(i, club);
             }
         });
+
+        editButton.addClickHandler(event -> {
+            editButton.setVisible(false);
+            gridTable.setVisible(false);
+            name.setVisible(true);
+            changeButton.setVisible(true);
+        });
+
 
         exitButton.addClickHandler(event -> {
             //нужно установить новую книгу, чтобы для нее создавался новый класс EditPage
@@ -114,7 +126,7 @@ public class EditPageClub extends Composite {
     }
 
     private void setupTable() {
-        gridTable = new DoubleClickTable();
+        gridTable = new FlexTable();
         // создает таблицу
         gridTable.setText(0, 0, "Name of club");
         gridTable.setText(0, 1, "players");
@@ -133,7 +145,7 @@ public class EditPageClub extends Composite {
                 for (int i = 0; i < result.size(); i++) {
                     Player p = result.get(i);
                     gridTable.setText(i + 1, 1,
-                            p.getLastName() + " " + p.getFirstName() + " " + p.getSecondName());
+                        p.getLastName() + " " + p.getFirstName() + " " + p.getSecondName());
                 }
                 if (result.size() == 0) {
                     gridTable.setText(1, 1, "no players for this team");

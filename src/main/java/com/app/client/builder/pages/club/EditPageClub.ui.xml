@@ -16,10 +16,11 @@
 
         <g:HTMLPanel ui:field="htmlpanel" width="50%">
             <div>
-                <g:TextBox ui:field="name" styleName="{style.input}"/>
+                <g:TextBox ui:field="name" styleName="{style.input}" visible="false"/>
             </div>
         </g:HTMLPanel>
-        <g:Button ui:field="changeButton" text="change" styleName="{style.button}" width="50%" visible="true"/>
+        <g:Button ui:field="editButton" text="change" styleName="{style.button}" width="50%" visible="true"/>
+        <g:Button ui:field="changeButton" text="change" styleName="{style.button}" width="50%" visible="false"/>
         <g:Button ui:field="exitButton" text="exit" styleName="{style.button}" width="50%" visible="true"/>
     </g:VerticalPanel>
 </ui:UiBinder>

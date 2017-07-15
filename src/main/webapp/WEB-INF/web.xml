@@ -5,7 +5,7 @@
          version="3.1">
     <servlet>
         <servlet-name>app</servlet-name>
-        <servlet-class>com.app.server.impl.AppImpl</servlet-class>
+        <servlet-class>com.app.server.impl.PlayerImpl</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>app</servlet-name>
